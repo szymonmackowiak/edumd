@@ -11,11 +11,11 @@ from edumd import *
 UNITS = [4, 4, 4]
 PBC = [1, 1, 1]
 
-NUNITX=UNITS[0] # Liczba komorek FCC w kierunku x
-NUNITY=UNITS[1] # Liczba komorek FCC w kierunku y
-NUNITZ=UNITS[2] # Liczba komorek FCC w kierunku z
+NUNITX=UNITS[0] # Number of FCC cells in the x direction
+NUNITY=UNITS[1] # Number of FCC cells in the y direction
+NUNITZ=UNITS[2] # Number of FCC cells in the z direction
 
-NATOMS=4*NUNITX*NUNITY*NUNITZ # Liczba atomow
+NATOMS=4*NUNITX*NUNITY*NUNITZ # Number of atoms
 
 run = 10000
 DT = 0.001
@@ -88,7 +88,6 @@ for i in range(run):
         
     FX, FY, FZ, U = forces_lj_verlet_list(RX, RY, RZ, v_list, marker, PBC, DBOX, RCUT)
     
-
 # evolution -------------------------------------------------------------------
      
     RX_old = RX.copy()
