@@ -1,6 +1,8 @@
-# Example 1.
+# Example 2.
 
-# Full interaction
+# Intercation: Verlet list
+# with PBC
+# Algorithm Velocity Verlet (forces computed inside the integration function)
 
 # Simulation starts here
 
@@ -9,12 +11,11 @@ from edumd import *
 UNITS = [3, 3, 3]
 PBC = [1, 1, 1]
 
-NUNITX=UNITS[0] # Liczba komorek FCC w kierunku x
-NUNITY=UNITS[1] # Liczba komorek FCC w kierunku y
-NUNITZ=UNITS[2] # Liczba komorek FCC w kierunku z
+NUNITX=UNITS[0] # Number of FCC cells in the x direction
+NUNITY=UNITS[1] # Number of FCC cells in the y direction
+NUNITZ=UNITS[2] # Number of FCC cells in the z direction
 
-NATOMS=4*NUNITX*NUNITY*NUNITZ # Liczba atomow
-
+NATOMS=4*NUNITX*NUNITY*NUNITZ # Number of atoms
 run = 5000
 DT = 0.001
 
@@ -50,7 +51,7 @@ sim_time = []
 RX, RY, RZ = block_fcc(UNITS, DBOX, rho, eq_dev)
 VX, VY, VZ = shuffle_initial_speeds(NATOMS, T0)
 
-FX, FY, FZ, U = old_forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
+FX, FY, FZ, U = forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
 
 VXH2, VYH2, VZH2 = newton_half_step_leap_frog(VX, VY, VZ, FX, FY, FZ, DT)
 
@@ -76,16 +77,10 @@ for i in range(run):
 # forces ----------------------------------------------------------------------
         
     #FX, FY, FZ, U = old_forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
+    # Forcces computed inside the integration function
 
 # evolution -------------------------------------------------------------------
     
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, DT) 
-    
-    #W algorytmie Verleta jest problem z obliczaniem prędkości i EK gdy mamy PBC.
-    
-    #RX, RY, RZ, VX, VY, VZ = newton_velocity_verlet(RX, RY, RZ, VX, VY, VZ, DT, PBC, DBOX, RCUT)
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet_pbc(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, PBC, DBOX, DT)    
-    #RX, RY, RZ, VXH2, VYH2, VZH2, VX, VY, VZ = newton_verlet_leap_frog_pbc(RX, RY, RZ, VXH2, VYH2, VZH2, FX, FY, FZ, PBC, DBOX, DT)
     RX, RY, RZ, VX, VY, VZ, U = newton_velocity_verlet_pbc(RX, RY, RZ, VX, VY, VZ, PBC, DBOX, RCUT, DT)
         
     if i%20 == 0:

@@ -1,6 +1,8 @@
-# Example 1.
+# Example 3.
 
-# Full interaction
+# Intercation: Verlet list
+# with PBC
+# Algorithm Verlet Leap-Frog (forces computed outside the integration function)
 
 # Simulation starts here
 
@@ -19,7 +21,7 @@ run = 10000
 DT = 0.001
 
 RCUT=2.5
-SKIN=0.3
+SKIN=0.5
 
 mass=1
 KB=1
@@ -35,9 +37,6 @@ BZ=(NUNITZ/NUNITX)*BX
 DBOX = [BX, BY, BZ]
 INTRANGE = RCUT + SKIN
 
-# grid structure --------------------------------------------------------------
-
-counter, grid_origin, grid_N, grid_dim, NEIGHBOURS_LIST, NEIGHBOURS_LIST_2 = grid_structure(DBOX, INTRANGE)
 
 #------------------------------------------------------------------------------    
 
@@ -79,7 +78,7 @@ save_RX = open(f"output/RX.txt", "a")
 save_RY = open(f"output/RY.txt", "a")
 save_RZ = open(f"output/RZ.txt", "a")
 
-verlet_update = 2
+verlet_update = 1
 
 
 for i in range(run):
@@ -87,24 +86,16 @@ for i in range(run):
     
 # forces ----------------------------------------------------------------------
         
-    #FX, FY, FZ, U = old_forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
-    #FX, FY, FZ, U = forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
     FX, FY, FZ, U = forces_lj_verlet_list(RX, RY, RZ, v_list, marker, PBC, DBOX, RCUT)
     
 
 # evolution -------------------------------------------------------------------
-    
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, DT) 
-    
-    #W algorytmie Verleta jest problem z obliczaniem prędkości i EK gdy mamy PBC.
-    
-    #RX, RY, RZ, VX, VY, VZ = newton_velocity_verlet(RX, RY, RZ, VX, VY, VZ, DT, PBC, DBOX, RCUT)
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet_pbc(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, PBC, DBOX, DT)    
+     
     RX_old = RX.copy()
     RY_old = RY.copy()
     RZ_old = RZ.copy()
     
-    RX, RY, RZ, VXH2, VYH2, VZH2, VX, VY, VZ = newton_verlet_leap_frog_pbc(RX, RY, RZ, VXH2, VYH2, VZH2, FX, FY, FZ, PBC, DBOX, DT, SKIN)
+    RX, RY, RZ, VXH2, VYH2, VZH2, VX, VY, VZ = newton_verlet_leap_frog_pbc(RX, RY, RZ, VXH2, VYH2, VZH2, FX, FY, FZ, PBC, DBOX, DT)
     
     DRX = DRX+(RX_old-RX)
     DRY = DRY+(RY_old-RY)
@@ -121,32 +112,6 @@ for i in range(run):
                 DRY = np.zeros(NATOMS)
                 DRZ = np.zeros(NATOMS)
                 DR2 = np.zeros(NATOMS)
-                
-    if verlet_update == 2:
-        to_update = list(np.where(DR2>(0.5*SKIN)**2)[0])
-        if to_update:
-            #print(f"to update: {to_update}")
-            where_is_parcicle, cell_content = grid_content(RX, RY, RZ, grid_N, grid_dim, grid_origin)
-            for item in to_update:
-                particles_to_update, neighbouring_particles = particles_to_update_and_neighbours(item, where_is_parcicle, cell_content, NEIGHBOURS_LIST, NEIGHBOURS_LIST_2)
-                v_list, marker = update_verlet_list(RX, RY, RZ, PBC, DBOX, RCUT, SKIN, particles_to_update, neighbouring_particles, v_list, marker)
-                #print("UPDATE")
-                for jtem in particles_to_update:
-                    DRX[jtem] = 0
-                    DRY[jtem] = 0
-                    DRZ[jtem] = 0
-                    DR2[jtem] = 0
-        
-        
-        #for item in ind:
-        #    particles_to_update, neighbouring_particles = particles_to_update_and_neighbours(item, where_is_parcicle, cell_content, NEIGHBOURS_LIST, NEIGHBOURS_LIST_2)
-            
-            #v_list_2, marker_2 = update_verlet_list(RX, RY, RZ, PBC, DBOX, RCUT, SKIN, particles_to_update, neighbouring_particles, v_list, marker)
-           
-
-        
-    #RX, RY, RZ, VX, VY, VZ, U = newton_velocity_verlet_pbc(RX, RY, RZ, VX, VY, VZ, PBC, DBOX, RCUT, DT)
-    
     
     
     if i%10 == 0:

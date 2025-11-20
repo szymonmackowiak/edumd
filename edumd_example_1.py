@@ -1,6 +1,8 @@
 # Example 1.
 
 # Full interaction
+# with PBC
+# Algorithm Verlet Leap-Frog (forces computed outside the integration function)
 
 # Simulation starts here
 
@@ -75,20 +77,11 @@ for i in range(run):
     
 # forces ----------------------------------------------------------------------
         
-    #FX, FY, FZ, U = old_forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
     FX, FY, FZ, U = forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
-    
 
 # evolution -------------------------------------------------------------------
     
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, DT) 
-    
-    #W algorytmie Verleta jest problem z obliczaniem prędkości i EK gdy mamy PBC.
-    
-    #RX, RY, RZ, VX, VY, VZ = newton_velocity_verlet(RX, RY, RZ, VX, VY, VZ, DT, PBC, DBOX, RCUT)
-    #RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet_pbc(RX, RY, RZ, RX_old, RY_old, RZ_old, FX, FY, FZ, PBC, DBOX, DT)    
     RX, RY, RZ, VXH2, VYH2, VZH2, VX, VY, VZ = newton_verlet_leap_frog_pbc(RX, RY, RZ, VXH2, VYH2, VZH2, FX, FY, FZ, PBC, DBOX, DT)
-    #RX, RY, RZ, VX, VY, VZ, U = newton_velocity_verlet_pbc(RX, RY, RZ, VX, VY, VZ, PBC, DBOX, RCUT, DT)
         
     if i%20 == 0:
         print(f"i = {i} out of {run}, tot_en = {tot_en}")
