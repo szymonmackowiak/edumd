@@ -1,4 +1,4 @@
-# last modified 01.10.2024.
+# last modified 20.11.2025.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -725,9 +725,3 @@ def newton_velocity_verlet_pbc(RX, RY, RZ, VX, VY, VZ, PBC, DBOX, RCUT, DT):
     return RX, RY, RZ, VX, VY, VZ, U
 
 #------------------------------------------------------------------------------
-
-
-
-    
-
-    
