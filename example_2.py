@@ -77,7 +77,7 @@ for i in range(run):
 # forces ----------------------------------------------------------------------
         
     #FX, FY, FZ, U = old_forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
-    # Forcces computed inside the integration function
+    # Forces computed inside the integration function
 
 # evolution -------------------------------------------------------------------
     
