@@ -1,6 +1,6 @@
 # Example 3.
 
-# Intercation: Verlet list
+# Interaction: Verlet list
 # with PBC
 # Algorithm Verlet Leap-Frog (forces computed outside the integration function)
 
@@ -8,7 +8,7 @@
 
 from edumd import *
 
-UNITS = [4, 4, 4]
+UNITS = [6, 6, 6]
 PBC = [1, 1, 1]
 
 NUNITX=UNITS[0] # Number of FCC cells in the x direction
@@ -17,7 +17,7 @@ NUNITZ=UNITS[2] # Number of FCC cells in the z direction
 
 NATOMS=4*NUNITX*NUNITY*NUNITZ # Number of atoms
 
-run = 10000
+run = 5000
 DT = 0.001
 
 RCUT=2.5
@@ -86,6 +86,7 @@ for i in range(run):
     
 # forces ----------------------------------------------------------------------
         
+    #FX, FY, FZ, U = forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
     FX, FY, FZ, U = forces_lj_verlet_list(RX, RY, RZ, v_list, marker, PBC, DBOX, RCUT)
     
 # evolution -------------------------------------------------------------------

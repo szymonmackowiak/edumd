@@ -1,6 +1,6 @@
 # Example 2.
 
-# Intercation: Verlet list
+# Interaction: Verlet list
 # with PBC
 # Algorithm Velocity Verlet (forces computed inside the integration function)
 

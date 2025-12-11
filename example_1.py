@@ -17,8 +17,8 @@ NUNITZ=UNITS[2] # Number of FCC cells in the z direction
 
 NATOMS=4*NUNITX*NUNITY*NUNITZ # Number of atoms
 
-run = 1000
-DT = 0.001
+run = 5000
+DT = 0.0005
 
 RCUT=2.5
 SKIN=0.5
@@ -56,7 +56,7 @@ FX, FY, FZ, U = forces_lj_full_interaction(RX, RY, RZ, PBC, DBOX, RCUT)
 
 VXH2, VYH2, VZH2 = newton_half_step_leap_frog(VX, VY, VZ, FX, FY, FZ, DT)
 
-RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet_initial_step(RX, RY, RZ, VX, VY, VZ, FX, FY, FZ, DT)
+#RX, RY, RZ, RX_old, RY_old, RZ_old, VX, VY, VZ = newton_verlet_initial_step(RX, RY, RZ, VX, VY, VZ, FX, FY, FZ, DT)
 tot_en = total_energy_per_atom(U, VX, VY, VZ)
 
 save_RX = open(f"output/RX.txt", "w")
